@@ -1,22 +1,42 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   Activity,
   AlertTriangle,
-  ArrowUpRight,
   Bell,
   BrainCircuit,
+  CheckCheck,
   Cpu,
   HeartPulse,
   Layers3,
-  Menu,
-  MessageSquareText,
   ShieldCheck,
   Sparkles,
   Stethoscope,
   TrendingUp,
   UserRound,
+  X,
 } from 'lucide-react'
 import FullBodyDiagnostics from './components/diagnostics/FullBodyDiagnostics'
+import AstronautProfiles from './components/AstronautProfiles'
+import MedicalAlerts from './components/MedicalAlerts'
+import LandingPage from './components/LandingPage'
+import MedicalInsights, { type InsightView } from './components/MedicalInsights'
+import CrewCare, { type CrewCareView } from './components/CrewCare'
+import VitalsTrendChart from './components/VitalsTrendChart'
+import useSimulatedTelemetry from './hooks/useSimulatedTelemetry'
+
+type DashboardView =
+  | 'Mission Overview'
+  | 'Astronaut Profiles'
+  | 'Full Body Diagnostics'
+  | 'Physiological Telemetry'
+  | 'Device Network'
+  | 'Health Complaints'
+  | 'Medical Alerts'
+  | 'Health Correlation'
+  | 'Early Warning'
+  | 'Mental Health'
+  | 'Infection Control'
 
 const navSections = [
   {
@@ -33,26 +53,13 @@ const navSections = [
     label: 'Medical intelligence',
     items: [
       { name: 'Health Complaints', icon: Stethoscope },
-      { name: 'AI Health Assistant', icon: MessageSquareText },
       { name: 'Medical Alerts', icon: AlertTriangle },
       { name: 'Health Correlation', icon: BrainCircuit },
       { name: 'Early Warning', icon: ShieldCheck },
+      { name: 'Mental Health', icon: HeartPulse },
+      { name: 'Infection Control', icon: ShieldCheck },
     ],
   },
-]
-
-const statCards = [
-  { label: 'Core vitals', value: 'Nominal', delta: '+2.4%', tone: 'cyan' },
-  { label: 'Hydration index', value: '91%', delta: '+6.8%', tone: 'emerald' },
-  { label: 'Stress variance', value: 'Low', delta: '-11.2%', tone: 'amber' },
-  { label: 'AI anomaly score', value: '0.07', delta: '-0.04', tone: 'violet' },
-]
-
-const telemetry = [
-  { label: 'Heart rate', value: '72 bpm', trend: '+3.2%' },
-  { label: 'SpO₂', value: '99.2%', trend: '+0.8%' },
-  { label: 'Core temp', value: '36.8°C', trend: '+0.3°' },
-  { label: 'Sleep rhythm', value: '8.4h', trend: '+1.1h' },
 ]
 
 const alerts = [
@@ -68,26 +75,49 @@ const crew = [
 ]
 
 function App() {
+  const liveVitals = useSimulatedTelemetry()
+  const [dashboardOpen, setDashboardOpen] = useState(false)
   const [diagnosticsOpen, setDiagnosticsOpen] = useState(false)
+  const [activeView, setActiveView] = useState<DashboardView>('Mission Overview')
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [notificationsRead, setNotificationsRead] = useState(false)
+  const statCards = [
+    { label: 'Heart rate', value: `${liveVitals.heartRate} bpm`, delta: 'SIM', tone: 'cyan' },
+    { label: 'Hydration index', value: `${liveVitals.hydration}%`, delta: 'SIM', tone: 'emerald' },
+    { label: 'Activity level', value: `${liveVitals.activity}%`, delta: 'SIM', tone: 'amber' },
+    { label: 'Neural sync', value: `${liveVitals.neuralSync}%`, delta: 'SIM', tone: 'violet' },
+  ]
+  const telemetry = [
+    { label: 'Heart rate', value: `${liveVitals.heartRate} bpm`, trend: 'SIM' },
+    { label: 'SpO₂', value: `${liveVitals.spo2.toFixed(1)}%`, trend: 'SIM' },
+    { label: 'Core temp', value: `${liveVitals.temperature.toFixed(1)}°C`, trend: 'SIM' },
+    { label: 'Hydration', value: `${liveVitals.hydration}%`, trend: 'SIM' },
+  ]
 
   if (diagnosticsOpen) {
-    return <FullBodyDiagnostics onBack={() => setDiagnosticsOpen(false)} />
+    return <FullBodyDiagnostics liveVitals={liveVitals} onBack={() => {
+      setDiagnosticsOpen(false)
+      setActiveView('Mission Overview')
+    }} />
+  }
+
+  if (!dashboardOpen) {
+    return <LandingPage onEnterDashboard={() => setDashboardOpen(true)} />
   }
 
   return (
-    <div className="min-h-screen bg-[#07111f] text-slate-100">
+    <div className="astra-dashboard min-h-screen bg-[#07111f] text-slate-100">
       <div className="mx-auto flex max-w-[1600px]">
         <aside className="hidden min-h-screen w-72 shrink-0 border-r border-slate-700/80 bg-[#091b29]/95 p-4 lg:flex lg:flex-col">
           <div className="flex items-center justify-between border-b border-slate-700/80 pb-4">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-400/60 bg-cyan-400/10 font-mono text-sm font-bold text-cyan-300">
-                A
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cyan-400/60 bg-cyan-400/10 text-cyan-300">
+                <Activity className="h-4 w-4" />
               </span>
-              <span className="font-mono text-sm tracking-[0.28em] text-slate-200">ASTRA</span>
+              <span className="font-mono text-xs font-semibold leading-relaxed tracking-[0.12em] text-slate-200">
+                ASTRO-SALUD,<br />FOR GOOD LIFE
+              </span>
             </div>
-            <button className="rounded-md border border-slate-600 p-2 text-slate-300 transition hover:border-cyan-400 hover:text-cyan-200">
-              <Menu className="h-4 w-4" />
-            </button>
           </div>
 
           <nav className="mt-6 space-y-6">
@@ -97,16 +127,22 @@ function App() {
                   {section.label}
                 </p>
                 <div className="space-y-1">
-                  {section.items.map(({ name, icon: Icon, active }) => (
+                  {section.items.map(({ name, icon: Icon }) => {
+                    const isActive = activeView === name
+                    return (
                     <button
                       key={name}
                       type="button"
-                      onClick={() => setDiagnosticsOpen(name === 'Full Body Diagnostics')}
+                      onClick={() => {
+                        const view = name as DashboardView
+                        setActiveView(view)
+                        setDiagnosticsOpen(view === 'Full Body Diagnostics')
+                      }}
                       className={[
                         'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition',
                         name === 'Full Body Diagnostics'
                           ? 'text-slate-300 hover:bg-slate-800/60 hover:text-slate-100'
-                          : active
+                          : isActive
                           ? 'bg-slate-800/80 text-cyan-200 ring-1 ring-cyan-400/30'
                           : 'text-slate-300 hover:bg-slate-800/60 hover:text-slate-100',
                       ].join(' ')}
@@ -114,42 +150,107 @@ function App() {
                       <Icon className="h-4 w-4" />
                       <span>{name}</span>
                     </button>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             ))}
           </nav>
-
-          <div className="mt-auto rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-3">
-            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-cyan-300">Simulation</p>
-            <p className="mt-2 text-sm text-slate-200">Feed nominal · monitoring active</p>
-          </div>
         </aside>
 
         <div className="flex-1">
-          <header className="border-b border-slate-700/80 bg-[#091b29]/85 px-4 py-4 backdrop-blur-sm lg:px-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-3">
-                <button className="rounded-lg border border-slate-600 p-2 text-cyan-300 lg:hidden">
-                  <Menu className="h-4 w-4" />
-                </button>
-                <div className="hidden items-center gap-2 sm:flex">
-                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">Mission ID</span>
-                  <span className="font-mono text-sm text-slate-100">ASTRA-117 // SIM</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 self-end md:self-auto">
-                <div className="relative">
-                  <button className="relative rounded-xl border border-slate-700 bg-slate-900/70 p-2.5 text-cyan-300 transition hover:border-cyan-400 hover:text-cyan-200">
+          <header className="relative z-30 border-b border-sky-100 bg-white px-4 py-4 lg:px-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-end">
+              <div className="flex w-full items-center justify-end gap-3 self-end md:self-auto">
+                <div className="relative z-40">
+                  <button
+                    type="button"
+                    aria-label="Notifications"
+                    aria-expanded={notificationsOpen}
+                    aria-haspopup="dialog"
+                    onClick={() => setNotificationsOpen((open) => !open)}
+                    className="relative rounded-xl border border-slate-700 bg-slate-900/70 p-2.5 text-cyan-300 transition hover:border-cyan-400 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  >
                     <Bell className="h-4 w-4" />
-                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
-                      3
-                    </span>
+                    {!notificationsRead && (
+                      <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-sky-600 text-[9px] font-bold text-white">
+                        2
+                      </span>
+                    )}
                   </button>
+                  {notificationsOpen && createPortal(
+                    <section
+                      role="dialog"
+                      aria-label="Astronaut health progress notifications"
+                      className="fixed right-4 top-[4.5rem] z-[100] w-[min(22rem,calc(100vw-2rem))] rounded-2xl border border-sky-100 bg-white p-4 text-slate-800 shadow-2xl"
+                    >
+                      <div className="flex items-center justify-between border-b border-sky-100 pb-3">
+                        <div>
+                          <h2 className="text-sm font-semibold text-slate-900">Crew health progress</h2>
+                          <p className="mt-0.5 text-xs text-slate-500">2 recent astronaut updates</p>
+                        </div>
+                        <button
+                          type="button"
+                          aria-label="Close notifications"
+                          onClick={() => setNotificationsOpen(false)}
+                          className="rounded-lg p-1.5 text-slate-500 transition hover:bg-sky-50 hover:text-sky-700"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="space-y-3 py-3">
+                        <article className="rounded-xl bg-sky-50 p-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <h3 className="text-xs font-semibold text-slate-900">Lt. Maya Rivera</h3>
+                            <span className="text-[10px] text-slate-500">12 min ago</span>
+                          </div>
+                          <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                            Hydration index improved to 91%; vestibular symptoms remain under observation.
+                          </p>
+                        </article>
+                        <article className="rounded-xl bg-sky-50 p-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <h3 className="text-xs font-semibold text-slate-900">M. Tunde Osei</h3>
+                            <span className="text-[10px] text-slate-500">1 hr ago</span>
+                          </div>
+                          <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                            Right shoulder mobility is improving; recovery exercises continue as planned.
+                          </p>
+                        </article>
+                      </div>
+                      <div className="flex items-center justify-between border-t border-sky-100 pt-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveView('Astronaut Profiles')
+                            setNotificationsOpen(false)
+                          }}
+                          className="text-xs font-semibold text-sky-700 hover:text-sky-900"
+                        >
+                          View astronaut profiles
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setNotificationsRead(true)}
+                          disabled={notificationsRead}
+                          className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-sky-700 disabled:cursor-default disabled:opacity-60"
+                        >
+                          <CheckCheck className="h-3.5 w-3.5" />
+                          Mark read
+                        </button>
+                      </div>
+                    </section>,
+                    document.body,
+                  )}
                 </div>
 
-                <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2">
+                <div
+                  tabIndex={0}
+                  role="group"
+                  aria-label="Medical officer profile"
+                  aria-describedby="medical-officer-info"
+                  className="group relative flex cursor-help items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/80 px-3 py-2 outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-400 bg-cyan-400/10 text-xs font-bold text-cyan-200">
                     MO
                   </div>
@@ -157,13 +258,33 @@ function App() {
                     <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-slate-400">Medical officer</p>
                     <p className="font-mono text-xs text-slate-100">DR. K. NIELSEN</p>
                   </div>
+                  <div
+                    id="medical-officer-info"
+                    role="tooltip"
+                    className="invisible absolute right-0 top-full z-50 mt-2 w-72 translate-y-1 rounded-2xl border border-sky-100 bg-white p-4 opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+                  >
+                    <p className="font-semibold text-slate-900">Dr. Kai Nielsen</p>
+                    <p className="mt-1 text-xs text-sky-700">Flight physician · AST-002</p>
+                    <p className="mt-3 text-xs leading-relaxed text-slate-600">
+                      Oversees crew medical reviews and health monitoring. Current status: stable, with no active conditions reported.
+                    </p>
+                    <p className="mt-2 text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                      Simulated mission profile
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </header>
 
-          <main className="space-y-6 p-4 lg:p-6">
-            <section className="overflow-hidden rounded-[28px] border border-slate-700/80 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.12),_transparent_30%),linear-gradient(135deg,#071826_0%,#0b2134_55%,#06131d_100%)] p-6 shadow-[0_30px_60px_rgba(2,6,23,0.5)]">
+          {activeView === 'Astronaut Profiles' ? <AstronautProfiles />
+            : activeView === 'Medical Alerts' ? <MedicalAlerts />
+            : activeView === 'Health Complaints' || activeView === 'Health Correlation' || activeView === 'Early Warning'
+              ? <MedicalInsights view={activeView as InsightView} />
+              : activeView === 'Mental Health' || activeView === 'Infection Control'
+                ? <CrewCare view={activeView as CrewCareView} />
+              : <main className="space-y-6 p-4 lg:p-6">
+            <section className="overflow-hidden rounded-[28px] border border-sky-100 bg-white p-6 shadow-md">
               <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-300">Mission control dashboard</p>
@@ -172,10 +293,6 @@ function App() {
                   </h1>
                 </div>
 
-                <div className="flex items-center gap-3 self-start rounded-full border border-cyan-400/40 bg-cyan-400/10 px-3 py-2 text-xs font-medium text-cyan-200">
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                  Demo feed nominal
-                </div>
               </div>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -198,34 +315,7 @@ function App() {
             </section>
 
             <section className="grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
-              <div className="rounded-[28px] border border-slate-700/80 bg-slate-950/40 p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">Patient telemetry</p>
-                    <h2 className="mt-2 text-2xl font-semibold text-white">Vitals trend</h2>
-                  </div>
-                  <button className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-2 text-xs font-medium text-slate-200">
-                    Last 72h <ArrowUpRight className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-
-                <div className="mt-6 rounded-2xl border border-slate-700/80 bg-[linear-gradient(180deg,rgba(12,25,38,0.95),rgba(9,19,30,0.9))] p-4">
-                  <div className="flex h-64 items-end gap-2">
-                    {[42, 48, 52, 60, 56, 78, 65, 82, 76, 88, 94, 72].map((height, index) => (
-                      <div key={index} className="flex-1 rounded-t-2xl bg-gradient-to-t from-cyan-600 via-cyan-400 to-sky-200/80" style={{ height: `${height}%` }} />
-                    ))}
-                  </div>
-                  <div className="mt-4 grid grid-cols-6 gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-slate-400">
-                    <span>Mon</span>
-                    <span>Tue</span>
-                    <span>Wed</span>
-                    <span>Thu</span>
-                    <span>Fri</span>
-                    <span>Sat</span>
-                  </div>
-                </div>
-              </div>
-
+              <VitalsTrendChart liveVitals={liveVitals} />
               <div className="rounded-[28px] border border-slate-700/80 bg-slate-950/40 p-5">
                 <div className="flex items-center justify-between">
                   <div>
@@ -305,7 +395,7 @@ function App() {
                 </div>
               </div>
             </section>
-          </main>
+          </main>}
         </div>
       </div>
     </div>
