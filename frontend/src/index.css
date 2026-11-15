@@ -4,8 +4,8 @@
   font-family: Inter, 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: rgba(240, 249, 255, 0.95);
-  background: #07111f;
+  color: #17364b;
+  background: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,9 +19,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(34, 211, 238, 0.1), transparent 25%),
-    linear-gradient(180deg, #07111f 0%, #0b1826 100%);
+  background: #ffffff;
 }
 
 * {
@@ -45,10 +43,356 @@ select {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.8);
+  background: #eff7fc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(94, 234, 212, 0.45);
+  background: #9acbe8;
   border-radius: 9999px;
+}
+
+.astra-diagnostics-light {
+  background: #f3f9fd !important;
+  color: #17364b !important;
+}
+
+.diagnostics-atmosphere {
+  display: none;
+}
+
+.diagnostics-toolbar {
+  color: #17364b;
+}
+
+.diagnostics-workspace {
+  color: #17364b;
+}
+
+.astra-diagnostics-light .rounded-3xl {
+  border-color: #d3e8f5 !important;
+  background-color: #fff !important;
+  box-shadow: 0 8px 26px rgba(39, 91, 120, 0.06) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.astra-diagnostics-light [class*='bg-[#081b2d]'],
+.astra-diagnostics-light [class*='bg-sky-950'],
+.astra-diagnostics-light [class*='bg-slate-900'],
+.astra-diagnostics-light [class*='bg-slate-800'] {
+  background-color: #edf7fd !important;
+}
+
+.astra-diagnostics-light [class*='bg-gradient-to'] {
+  background-image: none !important;
+  background-color: #edf7fd !important;
+}
+
+.astra-diagnostics-light .text-white,
+.astra-diagnostics-light .text-slate-100,
+.astra-diagnostics-light .text-slate-200 {
+  color: #17364b !important;
+}
+
+.astra-diagnostics-light .text-slate-300 {
+  color: #526f83 !important;
+}
+
+.astra-diagnostics-light .text-slate-400,
+.astra-diagnostics-light .text-slate-500 {
+  color: #7b8b81 !important;
+}
+
+.astra-diagnostics-light [class*='text-sky-'] {
+  color: #1682bd !important;
+}
+
+.astra-diagnostics-light [class*='border-sky-'] {
+  border-color: #d3e8f5 !important;
+}
+
+.astra-diagnostics-light input {
+  color: #20322a;
+}
+
+.astra-diagnostics-light input::placeholder {
+  color: #87958d;
+}
+
+.astra-diagnostics-light .diagnostics-workspace > section {
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .diagnostics-workspace {
+    width: calc(100% - 1rem);
+    margin-top: 0.5rem;
+    padding: 1rem;
+    border-radius: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .astra-diagnostics-light *,
+  .astra-diagnostics-light *::before,
+  .astra-diagnostics-light *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.astra-dashboard {
+  background: #f3f9fd !important;
+  color: #17364b !important;
+}
+
+.astra-diagnostics-light {
+  background: #f3f9fd !important;
+  color: #17364b !important;
+}
+
+.astra-dashboard [class*='bg-[#07111f]'],
+.astra-dashboard [class*='bg-[#091b29]'] {
+  background-color: #fff !important;
+}
+
+.astra-dashboard [class*='bg-slate-950'],
+.astra-dashboard [class*='bg-slate-900'],
+.astra-dashboard [class*='bg-slate-800'] {
+  background-color: #edf7fd !important;
+}
+
+.astra-dashboard [class*='bg-[radial-gradient'],
+.astra-dashboard [class*='bg-gradient-to-'],
+.astra-diagnostics-light [class*='bg-gradient-to-'] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+}
+
+.astra-dashboard [class*='text-white'],
+.astra-dashboard [class*='text-slate-100'],
+.astra-dashboard [class*='text-slate-200'],
+.astra-diagnostics-light [class*='text-white'],
+.astra-diagnostics-light [class*='text-slate-100'],
+.astra-diagnostics-light [class*='text-slate-200'] {
+  color: #17364b !important;
+}
+
+.astra-dashboard [class*='text-slate-300'],
+.astra-diagnostics-light [class*='text-slate-300'] {
+  color: #526f83 !important;
+}
+
+.astra-dashboard [class*='text-slate-400'],
+.astra-dashboard [class*='text-slate-500'],
+.astra-diagnostics-light [class*='text-slate-400'],
+.astra-diagnostics-light [class*='text-slate-500'] {
+  color: #718b9c !important;
+}
+
+.astra-dashboard [class*='text-cyan-'],
+.astra-dashboard [class*='text-sky-'],
+.astra-dashboard [class*='text-emerald-'],
+.astra-dashboard [class*='text-violet-'],
+.astra-dashboard [class*='text-amber-'],
+.astra-dashboard [class*='text-red-'],
+.astra-dashboard [class*='text-rose-'],
+.astra-diagnostics-light [class*='text-cyan-'],
+.astra-diagnostics-light [class*='text-sky-'],
+.astra-diagnostics-light [class*='text-emerald-'],
+.astra-diagnostics-light [class*='text-violet-'],
+.astra-diagnostics-light [class*='text-amber-'],
+.astra-diagnostics-light [class*='text-red-'],
+.astra-diagnostics-light [class*='text-rose-'] {
+  color: #1682bd !important;
+}
+
+.astra-dashboard [class*='bg-cyan-'],
+.astra-dashboard [class*='bg-sky-'],
+.astra-dashboard [class*='bg-emerald-'],
+.astra-dashboard [class*='bg-violet-'],
+.astra-dashboard [class*='bg-amber-'],
+.astra-dashboard [class*='bg-red-'],
+.astra-dashboard [class*='bg-rose-'],
+.astra-diagnostics-light [class*='bg-cyan-'],
+.astra-diagnostics-light [class*='bg-sky-'],
+.astra-diagnostics-light [class*='bg-emerald-'],
+.astra-diagnostics-light [class*='bg-violet-'],
+.astra-diagnostics-light [class*='bg-amber-'],
+.astra-diagnostics-light [class*='bg-red-'],
+.astra-diagnostics-light [class*='bg-rose-'] {
+  background-color: #e7f5fd !important;
+}
+
+.astra-dashboard [class*='border-slate-'],
+.astra-dashboard [class*='border-cyan-'],
+.astra-dashboard [class*='border-sky-'],
+.astra-dashboard [class*='border-emerald-'],
+.astra-dashboard [class*='border-violet-'],
+.astra-dashboard [class*='border-amber-'],
+.astra-dashboard [class*='border-red-'],
+.astra-dashboard [class*='border-rose-'],
+.astra-diagnostics-light [class*='border-cyan-'],
+.astra-diagnostics-light [class*='border-sky-'],
+.astra-diagnostics-light [class*='border-emerald-'],
+.astra-diagnostics-light [class*='border-violet-'],
+.astra-diagnostics-light [class*='border-amber-'],
+.astra-diagnostics-light [class*='border-red-'],
+.astra-diagnostics-light [class*='border-rose-'] {
+  border-color: #d3e8f5 !important;
+}
+
+.astra-dashboard [class*='ring-cyan-'],
+.astra-dashboard [class*='ring-sky-'],
+.astra-dashboard [class*='ring-emerald-'],
+.astra-dashboard [class*='ring-violet-'],
+.astra-dashboard [class*='ring-amber-'],
+.astra-dashboard [class*='ring-red-'],
+.astra-dashboard [class*='ring-rose-'],
+.astra-diagnostics-light [class*='ring-cyan-'],
+.astra-diagnostics-light [class*='ring-sky-'],
+.astra-diagnostics-light [class*='ring-emerald-'],
+.astra-diagnostics-light [class*='ring-violet-'],
+.astra-diagnostics-light [class*='ring-amber-'],
+.astra-diagnostics-light [class*='ring-red-'],
+.astra-diagnostics-light [class*='ring-rose-'] {
+  --tw-ring-color: #acd9f1 !important;
+}
+
+@keyframes astro-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes astro-popover-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.astra-dashboard main,
+.astra-diagnostics-light main {
+  animation: astro-content-enter 420ms ease-out both;
+}
+
+.astra-dashboard main > section,
+.astra-diagnostics-light main > section {
+  animation: astro-content-enter 480ms ease-out both;
+}
+
+.astra-dashboard main > section:nth-child(2),
+.astra-diagnostics-light main > section:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.astra-dashboard main > section:nth-child(3),
+.astra-diagnostics-light main > section:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.astra-dashboard main article,
+.astra-diagnostics-light main article {
+  animation: astro-content-enter 420ms ease-out both;
+}
+
+.astra-dashboard main article:nth-child(2),
+.astra-diagnostics-light main article:nth-child(2) {
+  animation-delay: 45ms;
+}
+
+.astra-dashboard main article:nth-child(3),
+.astra-diagnostics-light main article:nth-child(3) {
+  animation-delay: 90ms;
+}
+
+.astra-dashboard main article:nth-child(4),
+.astra-diagnostics-light main article:nth-child(4) {
+  animation-delay: 135ms;
+}
+
+.astra-dashboard main article:nth-child(5),
+.astra-diagnostics-light main article:nth-child(5) {
+  animation-delay: 180ms;
+}
+
+.astra-dashboard main article:nth-child(6),
+.astra-diagnostics-light main article:nth-child(6) {
+  animation-delay: 225ms;
+}
+
+.astra-dashboard main article:nth-child(7),
+.astra-diagnostics-light main article:nth-child(7) {
+  animation-delay: 270ms;
+}
+
+.astra-dashboard main article:nth-child(8),
+.astra-diagnostics-light main article:nth-child(8) {
+  animation-delay: 315ms;
+}
+
+.astra-dashboard button,
+.astra-dashboard a,
+.astra-diagnostics-light button,
+.astra-diagnostics-light a {
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.astra-dashboard button:hover:not(:disabled),
+.astra-dashboard a:hover,
+.astra-diagnostics-light button:hover:not(:disabled),
+.astra-diagnostics-light a:hover {
+  transform: translateY(-1px);
+}
+
+.astra-dashboard [role='dialog'] {
+  animation: astro-popover-enter 160ms ease-out both;
+}
+
+.astra-diagnostics-light .rounded-3xl {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.astra-diagnostics-light .rounded-3xl:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .astra-dashboard main,
+  .astra-dashboard main > section,
+  .astra-dashboard main article,
+  .astra-diagnostics-light main,
+  .astra-diagnostics-light main > section,
+  .astra-diagnostics-light main article,
+  .astra-dashboard [role='dialog'] {
+    animation: none !important;
+  }
+
+  .astra-dashboard button,
+  .astra-dashboard a,
+  .astra-diagnostics-light button,
+  .astra-diagnostics-light a,
+  .astra-diagnostics-light .rounded-3xl {
+    transition-duration: 0.01ms !important;
+  }
+
+  .astra-dashboard button:hover:not(:disabled),
+  .astra-dashboard a:hover,
+  .astra-diagnostics-light button:hover:not(:disabled),
+  .astra-diagnostics-light a:hover,
+  .astra-diagnostics-light .rounded-3xl:hover {
+    transform: none !important;
+  }
 }
